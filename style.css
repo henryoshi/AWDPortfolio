@@ -1,0 +1,634 @@
+/* ============================================================
+   AWD PORTFOLIO — style.css
+   "Metamorphosis" — backgrounds change, text breathes
+   ============================================================ */
+
+/* ── RESET & VARIABLES ────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --text-primary:    #e8e0d5;
+  --text-dim:        #a89880;
+  --text-ghost:      rgba(232, 224, 213, 0.35);
+  --accent-warm:     #c87941;
+  --faculty-border:  #4a2e1e;
+  --faculty-text:    #b8956a;
+
+  --font-body: 'Lora', Georgia, serif;
+  --font-mono: 'Space Mono', 'Courier New', monospace;
+
+  --section-pad: clamp(4rem, 10vw, 8rem);
+  --text-width:  65ch;
+}
+
+/* ── BASE ─────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #030303;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.1vw + 0.5rem, 1.15rem);
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+
+/* ── SPLASH SCREEN ────────────────────────────────────────── */
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 1.5s ease;
+}
+
+#splash.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#splash-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.splash-warning {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  opacity: 0;
+  animation: fade-in-up 0.8s ease 0.3s forwards;
+}
+
+#splash-title {
+  font-family: var(--font-body);
+  font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  /* typewriter effect */
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--accent-warm);
+  width: 0;
+  animation:
+    type-title    2.8s steps(30)   0.8s forwards,
+    blink-cursor  0.75s step-end   0.8s 5;
+}
+
+@keyframes type-title {
+  to { width: 100%; }
+}
+@keyframes blink-cursor {
+  50% { border-color: transparent; }
+}
+
+.splash-sub {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  opacity: 0;
+  animation: fade-in-up 0.8s ease 3.8s forwards;
+}
+
+#enter-btn {
+  margin-top: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--accent-warm);
+  color: var(--accent-warm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: lowercase;
+  padding: 0.65rem 2.2rem;
+  cursor: pointer;
+  opacity: 0;
+  animation: fade-in-up 0.8s ease 4.4s forwards;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+#enter-btn:hover {
+  background: var(--accent-warm);
+  color: #000;
+}
+
+/* ── FIXED BACKGROUND LAYERS ──────────────────────────────── */
+#bg-container {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* establishes stacking context so ::after overlays stay contained */
+  isolation: isolate;
+  /* render at native resolution — no sub-pixel compositing drift */
+  transform: translateZ(0);
+}
+
+/* ── Background: Crumbling brick wall ── */
+/* Swap CSS gradient for real image: background-image: url('images/bg-brick.jpg'); */
+#bg-brick {
+  background-color: #100b08;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.013) 0px, rgba(255,255,255,0.013) 1px,
+      transparent 1px, transparent 42px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.013) 0px, rgba(255,255,255,0.013) 1px,
+      transparent 1px, transparent 21px
+    ),
+    radial-gradient(ellipse at 30% 60%, rgba(80,40,20,0.4) 0%, transparent 60%);
+}
+
+/* ── Background: Curtains on fire, splashed with wine ── */
+/* Swap: background-image: url('images/bg-fire-curtains.jpg'); */
+#bg-fire {
+  background:
+    radial-gradient(ellipse at 70% 100%, #7a1800 0%, #3d0600 25%, #120200 60%, #000 100%),
+    radial-gradient(ellipse at 20% 80%, rgba(100, 10, 10, 0.6) 0%, transparent 50%);
+}
+
+/* ── Background: Fiery ruined city (Conquest) ── */
+/* Swap: background-image: url('images/bg-ruined-city.jpg'); */
+#bg-ruined-city {
+  background: linear-gradient(
+    to top,
+    #ff2200 0%,
+    #8b0e00 10%,
+    #2a0500 35%,
+    #050005 100%
+  );
+}
+
+/* ── Background: Pitch black (the Creature) ── */
+#bg-black {
+  background: #030303;
+}
+
+/* ── Background: Hallucination — deep oasis, dreamlike ── */
+/* Swap: background-image: url('images/bg-oasis.jpg'); */
+#bg-hallucination {
+  background:
+    radial-gradient(ellipse at 50% 90%, #0c2e4a 0%, #051525 40%, #000 100%),
+    radial-gradient(ellipse at 80% 20%, rgba(5,30,60,0.5) 0%, transparent 50%);
+}
+
+/* ── SCROLL CONTAINER & SECTIONS ─────────────────────────── */
+#scroll-container {
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  min-height: 100vh;
+  padding: var(--section-pad) clamp(1.5rem, 8vw, 5rem);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.section-inner {
+  max-width: var(--text-width);
+  width: 100%;
+  padding-top: 12vh;
+  padding-bottom: 18vh;
+}
+
+/* ── TYPOGRAPHY ───────────────────────────────────────────── */
+p {
+  margin-bottom: 1.7em;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Section label (e.g. "Reflection I") */
+h2.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  margin-bottom: 3.5rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--accent-warm);
+}
+
+/* Large italic opener */
+.opening-statement {
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 2.2em;
+}
+
+/* Mono "scroll." / "more to come." prompts */
+.small-note {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.45em;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 3rem;
+  animation: pulse-dim 3.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dim {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.8; }
+}
+
+/* Writer's notes / content warnings */
+.content-note {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-bottom: 2.8rem;
+  line-height: 1.7;
+}
+
+/* ── BLOCKQUOTES ──────────────────────────────────────────── */
+
+/* Opening epigraph (e.g. Robert Jordan) */
+blockquote.epigraph {
+  border-left: 2px solid var(--accent-warm);
+  padding: 0.5rem 0 0.5rem 1.6rem;
+  margin: 0.5rem 0 3rem;
+  font-style: italic;
+}
+
+blockquote.epigraph cite {
+  display: block;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-top: 0.6rem;
+}
+
+/* Closing quote (Kerouac) */
+blockquote.closing-quote {
+  text-align: center;
+  margin: 5rem auto 2.5rem;
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  max-width: 50ch;
+}
+
+blockquote.closing-quote cite {
+  display: block;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin-top: 0.8rem;
+}
+
+/* Midterm inline blockquotes */
+blockquote.midterm-quote {
+  border-left: 1px solid rgba(200, 121, 65, 0.35);
+  padding: 0.5rem 0 0.5rem 1.6rem;
+  margin: 2.5rem 0 1.5rem;
+  font-style: italic;
+  color: rgba(232, 224, 213, 0.75);
+  font-size: 0.95em;
+}
+
+blockquote.midterm-quote cite {
+  display: block;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  opacity: 0.65;
+  margin-top: 0.5rem;
+}
+
+/* ── ERA-LINE (Reflection III) ────────────────────────────── */
+.era-block {
+  margin-bottom: 3.8rem;
+}
+
+.era-heading {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  opacity: 0.75;
+  margin-bottom: 1rem;
+}
+
+/* ── FACULTY NOTES (Ellen's comments) ────────────────────── */
+aside.faculty-note {
+  margin-top: 3.5rem;
+  padding: 1.2rem 1.6rem;
+  border-left: 2px solid var(--faculty-border);
+  background: rgba(255, 255, 255, 0.018);
+  font-style: italic;
+  font-size: 0.86rem;
+  color: var(--faculty-text);
+  line-height: 1.75;
+}
+
+aside.faculty-note p {
+  margin-bottom: 0.9em;
+}
+
+aside.faculty-note p:last-child {
+  margin-bottom: 0;
+}
+
+.attribution {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-warm);
+  opacity: 0.65;
+}
+
+/* ── THE CREATURE PARAGRAPH ───────────────────────────────── */
+.creature-paragraph {
+  margin: 3.5rem 0;
+  padding: 2rem 2.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  background: rgba(0, 0, 0, 0.45);
+  line-height: 2.1;
+}
+
+/* On the black bg, breathe the text down slightly */
+#midterm p {
+  color: rgba(232, 224, 213, 0.8);
+}
+
+.creature-paragraph p {
+  color: rgba(232, 224, 213, 0.6);
+  margin-bottom: 0;
+}
+
+/* ── SPACKLE SECTIONS (future writing placeholders) ───────── */
+.spackle-section {
+  min-height: 35vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.spackle-placeholder {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.12);
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 0 !important;
+}
+
+/* ── SCROLL REVEAL ────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── ANIMATIONS ───────────────────────────────────────────── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── RIPPLE CANVAS ───────────────────────────────────────── */
+#ripple-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;   /* above backgrounds, well below text (z-index 1) */
+}
+
+/* ── SCROLLBAR ────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 2px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: rgba(200, 121, 65, 0.5); }
+
+/* ── SELECTION ────────────────────────────────────────────── */
+::selection {
+  background: rgba(200, 121, 65, 0.28);
+  color: var(--text-primary);
+}
+
+
+/* ============================================================
+   THREE NEW THEME SECTIONS
+   ============================================================ */
+
+/* ── ROCKWALL background layer ───────────────────────────── */
+#bg-rockwall {
+  background-image: url('rockwall.jpg');
+  background-size: cover;
+  background-position: center center;
+}
+
+/* Dark green veil — kept light so the texture stays readable */
+#bg-rockwall::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 28, 12, 0.45);
+}
+
+/* ── ROCKWALL section text ───────────────────────────────── */
+.theme-rockwall {
+  --text-local-primary: #c8e6c4;
+  --text-local-dim:     #8ab887;
+  --text-local-accent:  #6dbf67;
+}
+
+.theme-rockwall .section-inner {
+  color: var(--text-local-primary);
+}
+
+.theme-rockwall .section-label {
+  color: var(--text-local-accent);
+  border-left-color: var(--text-local-accent);
+}
+
+.theme-rockwall p,
+.theme-rockwall blockquote {
+  color: var(--text-local-primary);
+}
+
+.theme-rockwall .spackle-placeholder {
+  color: rgba(140, 200, 130, 0.22);
+}
+
+/* ── BURNING CITY background layer ───────────────────────── */
+#bg-burningcity {
+  background-image: url('burningcity.jpg');
+  background-size: cover;
+  background-position: center 30%;
+}
+
+/* Deep red veil — lighter so the city shows through */
+#bg-burningcity::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 4, 0, 0.42);
+}
+
+/* ── BURNING CITY section chrome ─────────────────────────── */
+.theme-fire {
+  position: relative;
+  /* clip flecks strictly to this section — none bleed into neighbours */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.theme-fire .section-inner {
+  position: relative;
+  z-index: 2;  /* above the flecks container */
+}
+
+.theme-fire .section-label {
+  color: #ff6030;
+  border-left-color: #ff6030;
+}
+
+.theme-fire p,
+.theme-fire blockquote {
+  color: #f0c8a0;
+}
+
+.theme-fire .spackle-placeholder {
+  color: rgba(255, 80, 20, 0.25);
+}
+
+/* ── FIRE FLECKS ─────────────────────────────────────────── */
+.fire-flecks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;      /* flecks that drift past the top edge disappear cleanly */
+  z-index: 1;
+  contain: strict;       /* tell the browser this layer is fully self-contained */
+}
+
+.fire-fleck {
+  position: absolute;
+  bottom: -8px;
+  border-radius: 50% 50% 30% 30%;
+  animation: rise-fleck linear forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes rise-fleck {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.9;
+  }
+  25% {
+    transform: translateY(-22vh) translateX(var(--drift)) scale(0.85);
+    opacity: 0.75;
+  }
+  65% {
+    transform: translateY(-58vh) translateX(calc(var(--drift) * 1.6)) scale(0.5);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-95vh) translateX(calc(var(--drift) * 2.2)) scale(0.1);
+    opacity: 0;
+  }
+}
+
+/* ── REFLECTION POND background layer ───────────────────── */
+#bg-pond {
+  background-image: url('reflectionpond.jpeg');
+  background-size: cover;
+  background-position: center 55%;  /* bias toward the water surface */
+}
+
+/* Very light vignette — let the pond breathe */
+#bg-pond::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 8, 18, 0.22);
+}
+
+/* ── POND section text ───────────────────────────────────── */
+.theme-pond .section-label {
+  color: #7ab8d4;
+  border-left-color: #7ab8d4;
+}
+
+.theme-pond p,
+.theme-pond blockquote {
+  color: #d4e8f0;
+}
+
+.theme-pond .spackle-placeholder {
+  color: rgba(100, 180, 210, 0.22);
+}
+
+/* ── POND: text dissolves at the water line ──────────────── */
+/* The mask fades text to transparent in the lower third,
+   as if the words are sinking into the reflection.
+   Adjust the stop percentages to raise or lower the waterline. */
+.pond-inner {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 52%,
+    rgba(0,0,0,0.55) 70%,
+    transparent 88%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 52%,
+    rgba(0,0,0,0.55) 70%,
+    transparent 88%
+  );
+}
