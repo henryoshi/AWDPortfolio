@@ -612,6 +612,69 @@ aside.faculty-note p:last-child {
   color: rgba(100, 180, 210, 0.22);
 }
 
+/* ── PARTICLE CANVAS ─────────────────────────────────────── */
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;   /* between bg (-1) and text (1) */
+}
+
+/* ── VINE (Reflection I left edge) ───────────────────────── */
+.theme-rockwall {
+  position: relative;
+}
+
+.vine-track {
+  position: absolute;
+  left: clamp(0.6rem, 2vw, 1.8rem);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vine-stem-el {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(to bottom,
+    #3d7a40 0%,
+    #4a9e4e 30%,
+    #2d6b30 60%,
+    #5ab55e 100%
+  );
+  box-shadow: 0 0 5px rgba(61, 122, 64, 0.35);
+  animation: grow-vine 55s linear forwards;
+}
+
+@keyframes grow-vine {
+  to { height: 100%; }
+}
+
+/* ── HEAT SHIMMER (Reflection II text) ───────────────────── */
+.theme-fire .section-inner {
+  filter: url(#heat-shimmer);
+}
+
+/* ── SPACKLE-3 / void: soften text so stars show ─────────── */
+#spackle-3 .spackle-placeholder {
+  color: rgba(255, 255, 255, 0.08);
+}
+
+/* ── BG-CURTAIN placeholder (spackle-2) ──────────────────── */
+/* Will be replaced with the generated wall+window image.
+   Using burningcity as fallback until image is ready.       */
+#bg-curtain {
+  background-color: #1a0a00;
+}
+
 /* ── POND: text dissolves at the water line ──────────────── */
 /* The mask fades text to transparent in the lower third,
    as if the words are sinking into the reflection.

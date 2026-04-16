@@ -32,6 +32,8 @@
     <div class="bg-layer" id="bg-rockwall"></div>
     <div class="bg-layer" id="bg-burningcity"></div>
     <div class="bg-layer" id="bg-pond"></div>
+    <!-- bg-curtain: spackle-2 wall+window image goes here once generated -->
+    <div class="bg-layer" id="bg-curtain"></div>
   </div>
 
   <!-- ── AUDIO ─────────────────────────────────────────────── -->
@@ -42,7 +44,7 @@
   <main id="scroll-container">
 
     <!-- OPENING: Pre-flection framing -->
-    <section class="section" id="opening" data-bg="brick" data-audio="none">
+    <section class="section" id="opening" data-bg="brick" data-audio="maybe">
       <div class="section-inner">
         <div class="reveal">
           <p class="opening-statement">Prior to this course I had done virtually no creative writing.</p>
@@ -57,7 +59,9 @@
     </section>
 
     <!-- REFLECTION I — rockwall theme -->
-    <section class="section theme-rockwall" id="reflection-1" data-bg="rockwall" data-audio="none">
+    <section class="section theme-rockwall" id="reflection-1" data-bg="rockwall" data-audio="maybe">
+      <!-- Vine: grows slowly down the left edge over ~55s -->
+      <div class="vine-track" aria-hidden="true"><div class="vine-stem-el"></div></div>
       <div class="section-inner">
 
         <div class="reveal">
@@ -96,7 +100,7 @@
     </section>
 
     <!-- SPACKLE: new reflection between R1 and R2 -->
-    <section class="section spackle-section" id="spackle-1" data-bg="rockwall" data-audio="none">
+    <section class="section spackle-section" id="spackle-1" data-bg="rockwall" data-audio="maybe">
       <div class="section-inner">
         <div class="reveal">
           <p class="spackle-placeholder">[new reflection to be woven in here]</p>
@@ -105,7 +109,7 @@
     </section>
 
     <!-- REFLECTION II — burning city theme -->
-    <section class="section theme-fire" id="reflection-2" data-bg="burningcity" data-audio="none">
+    <section class="section theme-fire" id="reflection-2" data-bg="burningcity" data-audio="maybe">
       <div class="fire-flecks" aria-hidden="true"></div>
       <div class="section-inner">
 
@@ -178,7 +182,7 @@
     </section>
 
     <!-- SPACKLE: new reflection between R2 and R3 -->
-    <section class="section spackle-section" id="spackle-2" data-bg="burningcity" data-audio="none">
+    <section class="section spackle-section" id="spackle-2" data-bg="burningcity" data-audio="maybe">
       <div class="section-inner">
         <div class="reveal">
           <p class="spackle-placeholder">[new reflection to be woven in here]</p>
@@ -187,7 +191,7 @@
     </section>
 
     <!-- REFLECTION III — pond theme -->
-    <section class="section theme-pond" id="reflection-3" data-bg="pond" data-audio="none">
+    <section class="section theme-pond" id="reflection-3" data-bg="pond" data-audio="maybe">
       <div class="section-inner pond-inner">
 
         <div class="reveal">
@@ -245,7 +249,7 @@
     </section>
 
     <!-- SPACKLE: before midterm -->
-    <section class="section spackle-section" id="spackle-3" data-bg="black" data-audio="none">
+    <section class="section spackle-section" id="spackle-3" data-bg="black" data-audio="maybe">
       <div class="section-inner">
         <div class="reveal">
           <p class="spackle-placeholder">[new reflection to be woven in here]</p>
@@ -254,7 +258,7 @@
     </section>
 
     <!-- MIDTERM REFLECTION -->
-    <section class="section" id="midterm" data-bg="black" data-audio="none">
+    <section class="section" id="midterm" data-bg="black" data-audio="maybe">
       <div class="section-inner">
 
         <div class="reveal">
@@ -346,6 +350,23 @@
     </section>
 
   </main>
+
+  <!-- SVG filter for heat shimmer on fire section -->
+  <svg id="heat-filter-svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;">
+    <defs>
+      <filter id="heat-shimmer" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="turbulence" baseFrequency="0.012 0.006" numOctaves="2" seed="5" result="turb">
+          <animate attributeName="baseFrequency"
+            values="0.010 0.005;0.016 0.009;0.010 0.005"
+            dur="10s" repeatCount="indefinite"/>
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="turb" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Particle canvas: dust, leaves, ash, smoke, rain, stars (z-index 0, behind text) -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
   <!-- Ripple border canvas — sits above backgrounds, below all text -->
   <canvas id="ripple-canvas" aria-hidden="true"></canvas>
