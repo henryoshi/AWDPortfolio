@@ -392,9 +392,9 @@ aside.faculty-note p:last-child {
   line-height: 2.1;
 }
 
-/* On the black bg, breathe the text down slightly */
-#midterm p {
-  color: rgba(232, 224, 213, 0.8);
+/* On the black bg, dim text slightly */
+#transition-conclusion p {
+  color: rgba(232, 224, 213, 0.75);
 }
 
 .creature-paragraph p {
@@ -663,16 +663,48 @@ aside.faculty-note p:last-child {
   filter: url(#heat-shimmer);
 }
 
-/* ── SPACKLE-3 / void: soften text so stars show ─────────── */
-#spackle-3 .spackle-placeholder {
+/* ── CONCLUSION / void: soften placeholder text so stars show */
+#transition-conclusion .spackle-placeholder {
   color: rgba(255, 255, 255, 0.08);
 }
 
-/* ── BG-CURTAIN placeholder (spackle-2) ──────────────────── */
-/* Will be replaced with the generated wall+window image.
-   Using burningcity as fallback until image is ready.       */
+/* ── BG-CURTAIN: wall + wine-speckled curtains ───────────── */
 #bg-curtain {
-  background-color: #1a0a00;
+  background-image: url('wine-curtains.png');
+  background-size: cover;
+  background-position: center;
+}
+
+#bg-curtain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 6, 3, 0.32);
+}
+
+/* ── RUINED CITY section text (sj.txt) ───────────────────── */
+.theme-ruin {
+  position: relative;
+}
+
+.theme-ruin .section-inner {
+  color: #c8a882;
+}
+
+.theme-ruin p,
+.theme-ruin blockquote {
+  color: #c8a882;
+}
+
+/* ── SOUND EFFECTS (sj_action.txt *BRRRRNG* lines) ──────── */
+.sound-effect {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  color: var(--accent-warm);
+  text-align: center;
+  margin: 2rem 0 !important;
+  opacity: 0.8;
 }
 
 /* ── POND: text dissolves at the water line ──────────────── */

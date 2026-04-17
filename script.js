@@ -480,13 +480,16 @@ function $id(id) { return document.getElementById(id); }
 
 const particleSystems = [
   createDustSystem($id('opening')),
-  createLeafSystem($id('reflection-1'), 'green'),
-  createLeafSystem($id('spackle-1'),    'transition'),
-  createAshSystem($id('reflection-2')),
-  createSmokeSystem($id('reflection-2')),
-  createAshSystem($id('spackle-2')),        // placeholder until curtain image ready
-  createRainSystem($id('reflection-3'), null),
-  createStarSystem($id('spackle-3')),
+  createLeafSystem($id('english'),           'green'),
+  createLeafSystem($id('transition-first'),  'transition'),
+  createAshSystem($id('sj')),
+  createSmokeSystem($id('sj')),
+  createAshSystem($id('sj-action')),
+  createSmokeSystem($id('sj-action')),
+  createRainSystem($id('transition-second'), SPACKLE2_RAIN_BOUNDS),
+  createRainSystem($id('unlearnt'), null),
+  createRainSystem($id('intraspect'), null),
+  createStarSystem($id('transition-conclusion')),
 ];
 
 // ── PARTICLE LOOP ─────────────────────────────────────────────
@@ -629,3 +632,123 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -4% 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ── TEXT CONTENT LOADER ────────────────────────────────────────
+// Fetches each .txt file and injects parsed HTML into [data-src] containers.
+// Runs after DOMContentLoaded; newly created .reveal elements are observed
+// by revealObserver once injected.
+
+function escHtml(s) {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Default: double-newline-separated paragraphs → reveal divs
+function parseDefault(text) {
+  return text.split(/\n\n+/)
+    .map(c => c.trim()).filter(Boolean)
+    .map(chunk =>
+      `<div class="reveal"><p>${escHtml(chunk).replace(/\n/g, '<br>')}</p></div>`
+    ).join('');
+}
+
+// writing/english.txt: "Heading:\n\nbody" era-blocks + closing Kerouac quote
+function parseEra(text) {
+  const chunks = text.split(/\n\n+/).map(c => c.trim()).filter(Boolean);
+  const html = [];
+  let i = 0;
+  while (i < chunks.length) {
+    const chunk = chunks[i];
+    const hm = chunk.match(/^([A-Z][A-Za-z\s]+):\s*$/);
+    if (hm && i + 1 < chunks.length) {
+      const body = chunks[i + 1];
+      html.push(
+        `<div class="reveal era-block">` +
+          `<h3 class="era-heading">${escHtml(hm[1])}</h3>` +
+          `<p>${escHtml(body).replace(/\n/g, '<br>')}</p>` +
+        `</div>`
+      );
+      i += 2;
+    } else {
+      // Kerouac closing quote: starts with " and attribution on next line
+      if (chunk.startsWith('"') && chunk.toLowerCase().includes('kerouac')) {
+        const lines = chunk.split('\n');
+        const q    = escHtml(lines[0].replace(/^"|"$/g, ''));
+        const cite = lines[1] ? escHtml(lines[1].replace(/^[―—\-]\s*/, '')) : 'Jack Kerouac';
+        html.push(
+          `<div class="reveal">` +
+            `<blockquote class="closing-quote"><p>${q}</p><cite>— ${cite}</cite></blockquote>` +
+          `</div>`
+        );
+      } else if (!chunk.startsWith('―') && !chunk.startsWith('—')) {
+        html.push(`<div class="reveal"><p>${escHtml(chunk).replace(/\n/g, '<br>')}</p></div>`);
+      }
+      i++;
+    }
+  }
+  return html.join('');
+}
+
+// emotions/unlearnt.txt: first chunk is the Robert Jordan epigraph.
+// Detect by citation line (starts with — or ―) rather than by quote char,
+// since the file may use curly/Unicode quotes that differ from ASCII ".
+function parseUnlearnt(text) {
+  const chunks = text.split(/\n\n+/).map(c => c.trim()).filter(Boolean);
+  return chunks.map((chunk, i) => {
+    const nlIdx = chunk.indexOf('\n');
+    const hasCitation = nlIdx > -1 && /^[—―\-]/.test(chunk.slice(nlIdx + 1).trimStart());
+    if (i === 0 && hasCitation) {
+      const q    = escHtml(chunk.slice(0, nlIdx).replace(/^[\u201c"]+|[\u201d"]+$/g, '').trim());
+      const cite = escHtml(chunk.slice(nlIdx + 1).trim());
+      return (
+        `<div class="reveal">` +
+          `<blockquote class="epigraph"><p>${q}</p><cite>${cite}</cite></blockquote>` +
+        `</div>`
+      );
+    }
+    return `<div class="reveal"><p>${escHtml(chunk).replace(/\n/g, '<br>')}</p></div>`;
+  }).join('');
+}
+
+// military_industry/sj_action.txt: detect *SOUND EFFECTS* as their own style
+function parseAction(text) {
+  const SFX = /^(\*[A-Z\s*]+\*\s*)+$/;
+  return text.split(/\n\n+/)
+    .map(c => c.trim()).filter(Boolean)
+    .map(chunk => {
+      if (SFX.test(chunk)) {
+        return `<div class="reveal"><p class="sound-effect">${escHtml(chunk)}</p></div>`;
+      }
+      return `<div class="reveal"><p>${escHtml(chunk).replace(/\n/g, '<br>')}</p></div>`;
+    }).join('');
+}
+
+function renderTxtContent(src, text) {
+  if (!text.trim()) return '';
+  if (src.includes('english.txt'))   return parseEra(text);
+  if (src.includes('unlearnt.txt'))  return parseUnlearnt(text);
+  if (src.includes('sj_action.txt')) return parseAction(text);
+  return parseDefault(text);
+}
+
+async function loadAllTxtContent() {
+  const containers = document.querySelectorAll('.txt-content[data-src]');
+  await Promise.all([...containers].map(async el => {
+    const src = el.dataset.src;
+    try {
+      const res  = await fetch(src);
+      const text = await res.text();
+      el.innerHTML = renderTxtContent(src, text);
+    } catch (_) {
+      // On file:// or fetch failure, show a placeholder so layout doesn't break
+      el.innerHTML = `<div class="reveal"><p class="spackle-placeholder">[${escHtml(src)}]</p></div>`;
+    }
+    // Observe any newly created .reveal elements
+    el.querySelectorAll('.reveal').forEach(r => revealObserver.observe(r));
+  }));
+}
+
+loadAllTxtContent();
