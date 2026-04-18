@@ -269,6 +269,17 @@ h2.section-label {
   50%       { opacity: 0.8; }
 }
 
+/* ── PIECE TITLES ─────────────────────────────────────────── */
+.piece-title {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 3rem;
+  font-weight: 400;
+}
+
 /* Writer's notes / content warnings */
 .content-note {
   font-size: 0.82rem;
@@ -355,10 +366,41 @@ blockquote.midterm-quote cite {
 }
 
 /* ── FACULTY NOTES (Ellen's comments) ────────────────────── */
-aside.faculty-note {
-  margin-top: 3.5rem;
-  padding: 1.2rem 1.6rem;
+details.faculty-note-toggle {
+  margin-top: 4rem;
   border-left: 2px solid var(--faculty-border);
+}
+
+details.faculty-note-toggle summary {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: var(--accent-warm);
+  opacity: 0.55;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  list-style: none;
+  transition: opacity 0.2s ease;
+  user-select: none;
+}
+
+details.faculty-note-toggle summary::-webkit-details-marker { display: none; }
+
+details.faculty-note-toggle summary::before {
+  content: '▸ ';
+  font-size: 0.6rem;
+}
+
+details.faculty-note-toggle[open] summary::before {
+  content: '▾ ';
+}
+
+details.faculty-note-toggle summary:hover {
+  opacity: 1;
+}
+
+.faculty-note-body {
+  padding: 1rem 1.6rem 1.2rem;
   background: rgba(255, 255, 255, 0.018);
   font-style: italic;
   font-size: 0.86rem;
@@ -366,21 +408,12 @@ aside.faculty-note {
   line-height: 1.75;
 }
 
-aside.faculty-note p {
+.faculty-note-body p {
   margin-bottom: 0.9em;
 }
 
-aside.faculty-note p:last-child {
+.faculty-note-body p:last-child {
   margin-bottom: 0;
-}
-
-.attribution {
-  font-family: var(--font-mono);
-  font-style: normal;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  color: var(--accent-warm);
-  opacity: 0.65;
 }
 
 /* ── THE CREATURE PARAGRAPH ───────────────────────────────── */

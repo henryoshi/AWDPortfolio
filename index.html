@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>On Learning to Bleed Ink — Henry Shields</title>
+  <title>R.andom A.ccess M.emoir — Henry Shields</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
@@ -14,8 +14,8 @@
   <!-- ── SPLASH SCREEN ────────────────────────────────────── -->
   <div id="splash">
     <div id="splash-inner">
-      <p class="splash-warning">headphones recommended</p>
-      <h1 id="splash-title">On Learning to Bleed Ink</h1>
+      <p class="splash-warning">headphones required</p>
+      <h1 id="splash-title">R.andom A.ccess M.emoir</h1>
       <p class="splash-sub">Henry Shields &nbsp;·&nbsp; ENGW3315 &nbsp;·&nbsp; Spring 2026</p>
       <button id="enter-btn">enter</button>
     </div>
@@ -37,83 +37,78 @@
   <!-- ── SCROLL CONTENT ────────────────────────────────────── -->
   <main id="scroll-container">
 
-    <!-- OPENING ── transitions/intro.txt ───────────────────── -->
-    <section class="section" id="opening" data-bg="brick" data-audio="maybe">
+    <!-- 1 ── OPENING ── transitions/intro.txt ── Godstained ────── -->
+    <section class="section" id="opening" data-bg="brick" data-audio="godstained">
       <div class="section-inner">
         <div class="txt-content" data-src="transitions/intro.txt"></div>
-        <div class="reveal">
-          <p class="small-note">scroll.</p>
-        </div>
       </div>
     </section>
 
-    <!-- ENGLISH ── writing/english.txt ─────────────────────── -->
-    <section class="section theme-rockwall" id="english" data-bg="rockwall" data-audio="maybe">
+    <!-- 2 ── ENGLISH ── writing/english.txt ── Anything Once ───── -->
+    <section class="section theme-rockwall" id="english" data-bg="rockwall" data-audio="anythingonce">
       <div class="vine-track" aria-hidden="true"><div class="vine-stem-el"></div></div>
       <div class="section-inner">
+        <h2 class="piece-title reveal">E.N.G.L.I.S.H.</h2>
         <div class="txt-content" data-src="writing/english.txt"></div>
-        <aside class="faculty-note reveal">
-          <p>I really love that you chose to write and organize around themes and not time--a theme-line, then. I think that quotation that you end with is terrific, and might suggest you begin with it for the final--and that your final be organized around themes, too--maybe the same ones, maybe new ones. (Or, you could play with the "scientifically bland" idea--juxtaposing your work here with that.) In short: this promises a final rich in possibility. <span class="attribution">— Ellen</span></p>
-        </aside>
       </div>
     </section>
 
-    <!-- TRANSITION I ── transitions/first.txt ──────────────── -->
+    <!-- 3 ── TRANSITION I ── transitions/first.txt ── Maybe ─────── -->
     <section class="section spackle-section" id="transition-first" data-bg="rockwall" data-audio="maybe">
       <div class="section-inner">
         <div class="txt-content" data-src="transitions/first.txt"></div>
       </div>
     </section>
 
-    <!-- SJ ── military_industry/sj.txt ─────────────────────── -->
-    <section class="section theme-fire" id="sj" data-bg="burningcity" data-audio="maybe">
+    <!-- 4 ── UNLEARNT ── emotions/unlearnt.txt ── I Didnt Understand -->
+    <section class="section" id="unlearnt" data-bg="curtain" data-audio="ididntunderstand">
+      <div class="section-inner">
+        <h2 class="piece-title reveal">Unlearnt</h2>
+        <div class="txt-content" data-src="emotions/unlearnt.txt"></div>
+      </div>
+    </section>
+
+    <!-- 5a ── INTRASPECT ── emotions/intraspect.txt ── No Care ──── -->
+    <section class="section theme-pond" id="intraspect" data-bg="pond" data-audio="nocare">
+      <div class="section-inner pond-inner">
+        <h2 class="piece-title reveal">Creature Feature.</h2>
+        <div class="txt-content" data-src="emotions/intraspect.txt"></div>
+      </div>
+    </section>
+
+    <!-- 5b ── INTRASPECT (cont.) ── faculty note ── Ready to Go ─── -->
+    <section class="section theme-pond" id="intraspect-b" data-bg="pond" data-audio="readytogo">
+      <div class="section-inner pond-inner">
+      </div>
+    </section>
+
+    <!-- 6 ── TRANSITION III ── transitions/third.txt ── I'm So Tired -->
+    <section class="section spackle-section" id="transition-third" data-bg="black" data-audio="imsotired">
+      <div class="section-inner">
+        <div class="txt-content" data-src="transitions/third.txt"></div>
+      </div>
+    </section>
+
+    <!-- 7 ── SJ ── military_industry/sj.txt ── Conquest ─────────── -->
+    <section class="section theme-fire" id="sj" data-bg="burningcity" data-audio="conquest">
       <div class="fire-flecks" aria-hidden="true"></div>
       <div class="section-inner">
+        <h2 class="piece-title reveal">I am Concerned</h2>
         <div class="txt-content" data-src="military_industry/sj.txt"></div>
       </div>
     </section>
 
-    <!-- SJ ACTION ── military_industry/sj_action.txt ─────────── -->
-    <section class="section theme-fire" id="sj-action" data-bg="burningcity" data-audio="maybe">
+    <!-- 8 ── SJ ACTION ── military_industry/sj_action.txt ── Hymn For a Droid -->
+    <section class="section theme-fire" id="sj-action" data-bg="burningcity" data-audio="hymnforadroid">
       <div class="fire-flecks" aria-hidden="true"></div>
       <div class="section-inner">
+        <h2 class="piece-title reveal">Honor is a Luxury</h2>
         <div class="txt-content" data-src="military_industry/sj_action.txt"></div>
       </div>
     </section>
 
-    <!-- TRANSITION II ── transitions/second.txt ────────────── -->
-    <section class="section spackle-section" id="transition-second" data-bg="curtain" data-audio="maybe">
-      <div class="section-inner">
-        <div class="txt-content" data-src="transitions/second.txt"></div>
-      </div>
-    </section>
-
-    <!-- UNLEARNT ── emotions/unlearnt.txt ──────────────────── -->
-    <section class="section" id="unlearnt" data-bg="curtain" data-audio="maybe">
-      <div class="section-inner">
-        <div class="reveal">
-          <p class="content-note">(content note: eating disorders, mental health, and alcoholism are touched on at a surface level)</p>
-        </div>
-        <div class="txt-content" data-src="emotions/unlearnt.txt"></div>
-        <aside class="faculty-note reveal">
-          <p>This is terrific and honest work, Henry--I am actually going to give it kudos for the class, so no need to revise unless you have something to add to it.</p>
-          <p>This is gorgeous writing, Henry--the poetic way that you are expressing ideas--all the alliteration, which holds the sentences together, even as they show a breaking apart--and the overall pacing and musicality gives so much. You might like reading Eula Biss' essay "The Pain Scale" or "Time and Distance Overcome." Also some of Kazim Ali's lyrical essays. I appreciate how you are taking each prompt to experiment a bit--and they are all paying off--and the way(s) that your answers to the prompts don't read "only" as answers--but could exist outside of a classroom setting: really terrific. <span class="attribution">— Ellen</span></p>
-        </aside>
-      </div>
-    </section>
-
-    <!-- INTRASPECT ── emotions/intraspect.txt ──────────────── -->
-    <section class="section theme-pond" id="intraspect" data-bg="pond" data-audio="maybe">
-      <div class="section-inner pond-inner">
-        <div class="txt-content" data-src="emotions/intraspect.txt"></div>
-        <aside class="faculty-note reveal">
-          <p>This is certainly the reflection that has me smiling the most today, and those who come after you will be hard pressed to beat it. You are really a terrific writer--there is an immediacy to your work that I admire, a kind of sprezzatura (and you thought quoting Marcus Aurelius--Marcus to you?--was pretentious!). I just really admire how this moves as a piece of writing; you have a very sticky mind, and all the disparate pieces cohere. All of your writing has been this way, really, and I love that taking charge of your writing and output in the course, that kind of engagement. I do hope to read a few more extras--not for a grade, because you are earning an A now, and the quality of your required work should maintain that, but because I simply like to read your writing. <span class="attribution">— Ellen</span></p>
-        </aside>
-      </div>
-    </section>
-
-    <!-- CONCLUSION ── transitions/conclusion.txt ───────────── -->
-    <section class="section spackle-section" id="transition-conclusion" data-bg="black" data-audio="maybe">
+    <!-- 9 ── CONCLUSION ── transitions/conclusion.txt ── Loss of Life -->
+    <section class="section spackle-section" id="transition-conclusion" data-bg="black" data-audio="lossoflife">
       <div class="section-inner">
         <div class="txt-content" data-src="transitions/conclusion.txt"></div>
       </div>

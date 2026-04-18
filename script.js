@@ -4,7 +4,16 @@
 
 // ── AUDIO ─────────────────────────────────────────────────────
 const tracks = {
-  maybe: new Audio('audio/Maybe.mp3'),
+  godstained:       new Audio('audio/Godstained.mp3'),
+  anythingonce:     new Audio('audio/Anything Once.mp3'),
+  maybe:            new Audio('audio/Maybe.mp3'),
+  ididntunderstand: new Audio('audio/I Didnt Understand.mp3'),
+  nocare:           new Audio('audio/No Care.mp3'),
+  readytogo:        new Audio('audio/Ready to Go.mp3'),
+  imsotired:        new Audio("audio/I'm So Tired.mp3"),
+  conquest:         new Audio('audio/Conquest.mp3'),
+  hymnforadroid:    new Audio('audio/Hymn For a Droid.mp3'),
+  lossoflife:       new Audio('audio/Loss of Life.mp3'),
 };
 
 for (const track of Object.values(tracks)) {
@@ -14,34 +23,61 @@ for (const track of Object.values(tracks)) {
 
 let currentTrack = null;
 
-function fadeOut(track, duration = 1400) {
+// Cancel-safe fade tracking — prevents concurrent rAF chains fighting over volume
+const fadingTracks = new Map(); // track → rAF id
+
+function cancelFade(track) {
+  const id = fadingTracks.get(track);
+  if (id) cancelAnimationFrame(id);
+  fadingTracks.delete(track);
+}
+
+// Equal-power crossfade: cos out + sin in keeps perceived loudness constant (no dip)
+const FADE_DURATION = 2000;
+
+function fadeOut(track, duration = FADE_DURATION) {
   if (!track) return;
+  cancelFade(track);
   const startVol  = track.volume;
   const startTime = performance.now();
   (function step(now) {
     const t = Math.min((now - startTime) / duration, 1);
-    track.volume = startVol * (1 - t);
-    if (t < 1) requestAnimationFrame(step);
-    else { track.pause(); ripple.onTrackStop(); }
+    track.volume = startVol * Math.cos(t * Math.PI / 2);
+    if (t < 1) {
+      fadingTracks.set(track, requestAnimationFrame(step));
+    } else {
+      track.pause();
+      fadingTracks.delete(track);
+      ripple.onTrackStop();
+    }
   })(performance.now());
 }
 
-function fadeIn(track, targetVol = 0.65, duration = 1400) {
+function fadeIn(track, targetVol = 0.65, duration = FADE_DURATION) {
   if (!track) return;
+  cancelFade(track);
   track.currentTime = 0;
   track.play().catch(() => {});
   ripple.onTrackStart(track);
   const startTime = performance.now();
   (function step(now) {
     const t = Math.min((now - startTime) / duration, 1);
-    track.volume = targetVol * t;
-    if (t < 1) requestAnimationFrame(step);
+    track.volume = targetVol * Math.sin(t * Math.PI / 2);
+    if (t < 1) {
+      fadingTracks.set(track, requestAnimationFrame(step));
+    } else {
+      fadingTracks.delete(track);
+    }
   })(performance.now());
 }
 
 function switchTrack(key) {
   const next = (key && key !== 'none') ? (tracks[key] ?? null) : null;
-  if (next === currentTrack) return;
+  if (next === currentTrack) {
+    // Re-entering the same section — restart from the top
+    if (next) { cancelFade(next); next.currentTime = 0; }
+    return;
+  }
   fadeOut(currentTrack);
   if (next) fadeIn(next);
   currentTrack = next;
@@ -55,7 +91,8 @@ function dismissSplash() {
   for (const t of Object.values(tracks)) t.load();
   splash.classList.add('fade-out');
   setTimeout(() => splash.remove(), 1600);
-  switchTrack('maybe');
+  currentTrack = null;
+  switchTrack('godstained');
 }
 
 enterBtn.addEventListener('click', (e) => { e.stopPropagation(); dismissSplash(); });
@@ -88,10 +125,11 @@ function switchBackground(key) {
 }
 
 // ── SECTION OBSERVER ──────────────────────────────────────────
-// Tracks ALL currently-intersecting sections so the most-visible
-// one wins even during rapid scrolling (fixes the previous single-
-// entry "best" bug).
+// Tracks ALL currently-intersecting sections; most-visible wins.
+// switchTrack / switchBackground only fire when the dominant section
+// actually changes — prevents rAF pile-ups from mid-scroll re-fires.
 const visibleSections = new Map();
+let currentSection = null;
 
 const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -107,13 +145,16 @@ const sectionObserver = new IntersectionObserver((entries) => {
     if (ratio > bestRatio) { bestRatio = ratio; best = sec; }
   }
 
-  if (best) {
-    switchBackground(best.dataset.bg);
-    switchTrack(best.dataset.audio);
+  if (best !== currentSection) {
+    currentSection = best;
+    if (best) {
+      switchBackground(best.dataset.bg);
+      switchTrack(best.dataset.audio);
+    }
   }
 }, {
-  threshold:  [0.05, 0.1, 0.3, 0.5, 0.7],
-  rootMargin: '0px 0px -5% 0px',
+  threshold:  [0.01, 0.05, 0.1, 0.3, 0.5, 0.7],
+  rootMargin: '5% 0px 5% 0px',
 });
 
 document.querySelectorAll('section[data-bg]').forEach(s => sectionObserver.observe(s));
@@ -480,15 +521,16 @@ function $id(id) { return document.getElementById(id); }
 
 const particleSystems = [
   createDustSystem($id('opening')),
-  createLeafSystem($id('english'),           'green'),
-  createLeafSystem($id('transition-first'),  'transition'),
+  createLeafSystem($id('english'),          'green'),
+  createLeafSystem($id('transition-first'), 'transition'),
+  createRainSystem($id('unlearnt'),         null),
+  createRainSystem($id('intraspect'),       null),
+  createRainSystem($id('intraspect-b'),     null),
+  createStarSystem($id('transition-third')),
   createAshSystem($id('sj')),
   createSmokeSystem($id('sj')),
   createAshSystem($id('sj-action')),
   createSmokeSystem($id('sj-action')),
-  createRainSystem($id('transition-second'), SPACKLE2_RAIN_BOUNDS),
-  createRainSystem($id('unlearnt'), null),
-  createRainSystem($id('intraspect'), null),
   createStarSystem($id('transition-conclusion')),
 ];
 
@@ -566,7 +608,7 @@ const ripple = (() => {
   startAmbient();
 
   let audioCtx = null, analyser = null, dataArray = null, connectedSrc = null, lastSpawn = 0;
-  const SPAWN_COOLDOWN = 120;
+  const SPAWN_COOLDOWN = 350;
 
   function ensureAudioCtx() {
     if (audioCtx) return;
@@ -606,7 +648,7 @@ const ripple = (() => {
         const v = (dataArray[i] - 128) / 128; sum += v * v;
       }
       const rms = Math.sqrt(sum / dataArray.length);
-      if (rms > 0.04 && now - lastSpawn > SPAWN_COOLDOWN) {
+      if (rms > 0.15 && now - lastSpawn > SPAWN_COOLDOWN) {
         spawnRing(Math.min(rms * 4, 1)); lastSpawn = now;
       }
       requestAnimationFrame(tick);
@@ -729,7 +771,7 @@ function parseAction(text) {
 function renderTxtContent(src, text) {
   if (!text.trim()) return '';
   if (src.includes('english.txt'))   return parseEra(text);
-  if (src.includes('unlearnt.txt'))  return parseUnlearnt(text);
+  if (src.includes('unlearnt.txt'))  return parseDefault(text);
   if (src.includes('sj_action.txt')) return parseAction(text);
   return parseDefault(text);
 }
