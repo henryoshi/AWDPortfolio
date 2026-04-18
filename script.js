@@ -5,15 +5,15 @@
 // ── AUDIO ─────────────────────────────────────────────────────
 const tracks = {
   godstained:       new Audio('audio/Godstained.mp3'),
-  anythingonce:     new Audio('audio/Anything Once.mp3'),
+  anythingonce:     new Audio('audio/AnythingOnce.mp3'),
   maybe:            new Audio('audio/Maybe.mp3'),
-  ididntunderstand: new Audio('audio/I Didnt Understand.mp3'),
-  nocare:           new Audio('audio/No Care.mp3'),
-  readytogo:        new Audio('audio/Ready to Go.mp3'),
-  imsotired:        new Audio("audio/I'm So Tired.mp3"),
+  ididntunderstand: new Audio('audio/IDidntUnderstand.mp3'),
+  nocare:           new Audio('audio/NoCare.mp3'),
+  readytogo:        new Audio('audio/ReadyToGo.mp3'),
+  imsotired:        new Audio('audio/ImSoTired.mp3'),
   conquest:         new Audio('audio/Conquest.mp3'),
-  hymnforadroid:    new Audio('audio/Hymn For a Droid.mp3'),
-  lossoflife:       new Audio('audio/Loss of Life.mp3'),
+  hymnforadroid:    new Audio('audio/HymnForaDroid.mp3'),
+  lossoflife:       new Audio('audio/LossOfLife.mp3'),
 };
 
 for (const track of Object.values(tracks)) {
