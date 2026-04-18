@@ -128,6 +128,15 @@ body {
   color: #000;
 }
 
+/* ── TITLE ACCENT LETTERS (R. A. M.) ─────────────────────── */
+.ram-letter {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 1.25em;
+  letter-spacing: 0.04em;
+}
+
 /* ── FIXED BACKGROUND LAYERS ──────────────────────────────── */
 #bg-container {
   position: fixed;
@@ -147,6 +156,20 @@ body {
   isolation: isolate;
   /* render at native resolution — no sub-pixel compositing drift */
   transform: translateZ(0);
+}
+
+/* ── Background: Ocean ── */
+#bg-ocean {
+  background-image: url('ocean.jpg');
+  background-size: cover;
+  background-position: center center;
+}
+
+#bg-ocean::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 8, 20, 0.35);
 }
 
 /* ── Background: Crumbling brick wall ── */
@@ -218,7 +241,7 @@ body {
   max-width: var(--text-width);
   width: 100%;
   padding-top: 12vh;
-  padding-bottom: 18vh;
+  padding-bottom: 8vh;
 }
 
 /* ── TYPOGRAPHY ───────────────────────────────────────────── */
@@ -272,12 +295,13 @@ h2.section-label {
 /* ── PIECE TITLES ─────────────────────────────────────────── */
 .piece-title {
   font-family: var(--font-mono);
-  font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+  font-size: clamp(1.3rem, 2.8vw, 2rem);
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--text-dim);
   margin-bottom: 3rem;
   font-weight: 400;
+  text-align: center;
 }
 
 /* Writer's notes / content warnings */
@@ -437,7 +461,7 @@ details.faculty-note-toggle summary:hover {
 
 /* ── SPACKLE SECTIONS (future writing placeholders) ───────── */
 .spackle-section {
-  min-height: 35vh;
+  min-height: 18vh;
   align-items: center;
   justify-content: center;
 }
@@ -508,14 +532,14 @@ details.faculty-note-toggle summary:hover {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(8, 28, 12, 0.45);
+  background: rgba(6, 22, 10, 0.55);
 }
 
 /* ── ROCKWALL section text ───────────────────────────────── */
 .theme-rockwall {
-  --text-local-primary: #c8e6c4;
-  --text-local-dim:     #8ab887;
-  --text-local-accent:  #6dbf67;
+  --text-local-primary: #eef5ee;
+  --text-local-dim:     #d4e8d4;
+  --text-local-accent:  #b8d8b8;
 }
 
 .theme-rockwall .section-inner {
@@ -527,13 +551,17 @@ details.faculty-note-toggle summary:hover {
   border-left-color: var(--text-local-accent);
 }
 
+.theme-rockwall .piece-title {
+  color: var(--text-local-dim);
+}
+
 .theme-rockwall p,
 .theme-rockwall blockquote {
   color: var(--text-local-primary);
 }
 
 .theme-rockwall .spackle-placeholder {
-  color: rgba(140, 200, 130, 0.22);
+  color: rgba(112, 160, 104, 0.22);
 }
 
 /* ── BURNING CITY background layer ───────────────────────── */
@@ -632,13 +660,18 @@ details.faculty-note-toggle summary:hover {
 
 /* ── POND section text ───────────────────────────────────── */
 .theme-pond .section-label {
-  color: #7ab8d4;
-  border-left-color: #7ab8d4;
+  color: #060d1a;
+  border-left-color: #060d1a;
+}
+
+.theme-pond .piece-title {
+  color: #060d1a;
 }
 
 .theme-pond p,
 .theme-pond blockquote {
-  color: #d4e8f0;
+  color: #060d1a;
+  font-weight: 700;
 }
 
 .theme-pond .spackle-placeholder {
@@ -678,12 +711,12 @@ details.faculty-note-toggle summary:hover {
   width: 100%;
   height: 0;
   background: linear-gradient(to bottom,
-    #3d7a40 0%,
-    #4a9e4e 30%,
-    #2d6b30 60%,
-    #5ab55e 100%
+    #316233 0%,
+    #3b7e3e 30%,
+    #245626 60%,
+    #48914b 100%
   );
-  box-shadow: 0 0 5px rgba(61, 122, 64, 0.35);
+  box-shadow: 0 0 5px rgba(49, 98, 51, 0.35);
   animation: grow-vine 55s linear forwards;
 }
 
@@ -740,23 +773,5 @@ details.faculty-note-toggle summary:hover {
   opacity: 0.8;
 }
 
-/* ── POND: text dissolves at the water line ──────────────── */
-/* The mask fades text to transparent in the lower third,
-   as if the words are sinking into the reflection.
-   Adjust the stop percentages to raise or lower the waterline. */
-.pond-inner {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 52%,
-    rgba(0,0,0,0.55) 70%,
-    transparent 88%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 52%,
-    rgba(0,0,0,0.55) 70%,
-    transparent 88%
-  );
-}
+/* ── POND: dissolve effect removed ──────────────────────── */
+.pond-inner {}

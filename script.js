@@ -74,8 +74,13 @@ function fadeIn(track, targetVol = 0.65, duration = FADE_DURATION) {
 function switchTrack(key) {
   const next = (key && key !== 'none') ? (tracks[key] ?? null) : null;
   if (next === currentTrack) {
-    // Re-entering the same section — restart from the top
-    if (next) { cancelFade(next); next.currentTime = 0; }
+    // Re-entering the same section — always restart from the top
+    if (next) {
+      cancelFade(next);
+      next.currentTime = 0;
+      next.volume = 0.65;
+      if (next.paused) next.play().catch(() => {});
+    }
     return;
   }
   fadeOut(currentTrack);
@@ -103,6 +108,7 @@ splash.addEventListener('click', () => {
 // ── BACKGROUND LAYERS ─────────────────────────────────────────
 const bgLayers = {
   'brick':         document.getElementById('bg-brick'),
+  'ocean':         document.getElementById('bg-ocean'),
   'fire':          document.getElementById('bg-fire'),
   'ruined-city':   document.getElementById('bg-ruined-city'),
   'black':         document.getElementById('bg-black'),
@@ -113,8 +119,8 @@ const bgLayers = {
   'curtain':       document.getElementById('bg-curtain'),
 };
 
-bgLayers['brick'].style.opacity = '1';
-let currentBg = 'brick';
+bgLayers['ocean'].style.opacity = '1';
+let currentBg = 'ocean';
 
 function switchBackground(key) {
   if (!key || key === currentBg) return;
@@ -489,8 +495,8 @@ function createRainSystem(el, bounds) {
 }
 
 // ── STAR SYSTEM ───────────────────────────────────────────────
-function createStarSystem(el) {
-  const stars = Array.from({ length: 55 }, () => ({
+function createStarSystem(el, count = 55) {
+  const stars = Array.from({ length: count }, () => ({
     x:         Math.random() * window.innerWidth,
     y:         Math.random() * window.innerHeight,
     r:         Math.random() * 0.9 + 0.3,
@@ -531,7 +537,7 @@ const particleSystems = [
   createSmokeSystem($id('sj')),
   createAshSystem($id('sj-action')),
   createSmokeSystem($id('sj-action')),
-  createStarSystem($id('transition-conclusion')),
+  createStarSystem($id('transition-conclusion'), 200),
 ];
 
 // ── PARTICLE LOOP ─────────────────────────────────────────────
@@ -601,13 +607,13 @@ const ripple = (() => {
   let ambientTimer = null;
   function startAmbient() {
     if (ambientTimer) return;
-    spawnRing(0.45);
-    ambientTimer = setInterval(() => spawnRing(0.45), 1800);
+    spawnRing(0.225);
+    ambientTimer = setInterval(() => spawnRing(0.225), 1800);
   }
   function stopAmbient() { clearInterval(ambientTimer); ambientTimer = null; }
   startAmbient();
 
-  let audioCtx = null, analyser = null, dataArray = null, connectedSrc = null, lastSpawn = 0;
+  let audioCtx = null, analyser = null, dataArray = null, lastSpawn = 0;
   const SPAWN_COOLDOWN = 350;
 
   function ensureAudioCtx() {
@@ -617,21 +623,21 @@ const ripple = (() => {
     analyser.fftSize = 256;
     dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.connect(audioCtx.destination);
+    // Wire every track through the analyser once, upfront.
+    // createMediaElementSource() can only be called once per element —
+    // calling it again on re-entry throws a DOMException and silently
+    // kills the fadeIn volume ramp, leaving the track playing at vol 0.
+    for (const audioEl of Object.values(tracks)) {
+      audioCtx.createMediaElementSource(audioEl).connect(analyser);
+    }
   }
 
   function connectTrack(audioEl) {
     if (!audioEl || !(audioEl instanceof HTMLMediaElement)) return;
     ensureAudioCtx();
     if (audioCtx.state === 'suspended') audioCtx.resume();
-    if (connectedSrc && connectedSrc._el !== audioEl) {
-      try { connectedSrc.disconnect(); } catch (_) {}
-      connectedSrc = null;
-    }
-    if (!connectedSrc) {
-      const src = audioCtx.createMediaElementSource(audioEl);
-      src._el = audioEl; src.connect(analyser); connectedSrc = src;
-    }
-    stopAmbient(); pollAnalyser();
+    stopAmbient();
+    pollAnalyser();
   }
 
   function disconnectTrack() { startAmbient(); }
@@ -649,7 +655,7 @@ const ripple = (() => {
       }
       const rms = Math.sqrt(sum / dataArray.length);
       if (rms > 0.15 && now - lastSpawn > SPAWN_COOLDOWN) {
-        spawnRing(Math.min(rms * 4, 1)); lastSpawn = now;
+        spawnRing(Math.min(rms * 2, 0.5)); lastSpawn = now;
       }
       requestAnimationFrame(tick);
     }

@@ -15,7 +15,7 @@
   <div id="splash">
     <div id="splash-inner">
       <p class="splash-warning">headphones required</p>
-      <h1 id="splash-title">R.andom A.ccess M.emoir</h1>
+      <h1 id="splash-title"><span class="ram-letter">R.</span>andom <span class="ram-letter">A.</span>ccess <span class="ram-letter">M.</span>emoir</h1>
       <p class="splash-sub">Henry Shields &nbsp;·&nbsp; ENGW3315 &nbsp;·&nbsp; Spring 2026</p>
       <button id="enter-btn">enter</button>
     </div>
@@ -24,6 +24,7 @@
   <!-- ── FIXED BACKGROUND LAYERS ──────────────────────────── -->
   <div id="bg-container" aria-hidden="true">
     <div class="bg-layer" id="bg-brick"></div>
+    <div class="bg-layer" id="bg-ocean"></div>
     <div class="bg-layer" id="bg-fire"></div>
     <div class="bg-layer" id="bg-ruined-city"></div>
     <div class="bg-layer" id="bg-black"></div>
@@ -38,7 +39,7 @@
   <main id="scroll-container">
 
     <!-- 1 ── OPENING ── transitions/intro.txt ── Godstained ────── -->
-    <section class="section" id="opening" data-bg="brick" data-audio="godstained">
+    <section class="section" id="opening" data-bg="ocean" data-audio="godstained">
       <div class="section-inner">
         <div class="txt-content" data-src="transitions/intro.txt"></div>
       </div>
@@ -54,7 +55,7 @@
     </section>
 
     <!-- 3 ── TRANSITION I ── transitions/first.txt ── Maybe ─────── -->
-    <section class="section spackle-section" id="transition-first" data-bg="rockwall" data-audio="maybe">
+    <section class="section spackle-section theme-rockwall" id="transition-first" data-bg="rockwall" data-audio="maybe">
       <div class="section-inner">
         <div class="txt-content" data-src="transitions/first.txt"></div>
       </div>
@@ -83,7 +84,7 @@
     </section>
 
     <!-- 6 ── TRANSITION III ── transitions/third.txt ── I'm So Tired -->
-    <section class="section spackle-section" id="transition-third" data-bg="black" data-audio="imsotired">
+    <section class="section spackle-section" id="transition-third" data-bg="burningcity" data-audio="imsotired">
       <div class="section-inner">
         <div class="txt-content" data-src="transitions/third.txt"></div>
       </div>
